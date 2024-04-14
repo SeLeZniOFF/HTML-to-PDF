@@ -198,6 +198,19 @@ class TaxDebt(models.Model):
             self.user = get_current_request().user
         super().save(*args, **kwargs)
 
+class History(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", editable=False)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Клиент")
+    history = models.TextField(verbose_name="История")
+
+    class Meta:
+        verbose_name = "История"
+        verbose_name_plural = "Истории"
+
+    def __str__(self):
+        return f'{self.client.last_name} {self.client.first_name}'
+
+
 # Сигналы для привязки пользователя к объекту перед сохранением
 @receiver(pre_save, sender=Client)
 def add_user_to_client(sender, instance, **kwargs):
@@ -238,3 +251,8 @@ def add_user_to_creditor(sender, instance, **kwargs):
 def add_user_to_taxDebt(sender, instance, **kwargs):
     if not instance.pk and not instance.user_id:
         instance.user = get_current_request().user  # Привязываем текущего пользователя к объекту перед сохранением
+
+@receiver(pre_save, sender=History)
+def add_user_to_history(sender, instance, **kwargs):
+    if not instance.pk and not instance.user_id:
+        instance.user = instance.request.user  # Привязываем текущего пользователя к объекту перед сохранением
