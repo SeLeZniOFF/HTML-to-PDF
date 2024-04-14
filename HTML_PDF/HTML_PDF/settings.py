@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bankrotApp',
+    'cases',
 ]
 
 MIDDLEWARE = [
@@ -49,6 +50,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'bankrotApp.utils.ThreadLocalMiddleware',
+    'cases.utils.ThreadLocalMiddleware',
 ]
 
 ROOT_URLCONF = 'HTML_PDF.urls'

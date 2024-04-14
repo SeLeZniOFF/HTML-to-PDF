@@ -255,4 +255,4 @@ def add_user_to_taxDebt(sender, instance, **kwargs):
 @receiver(pre_save, sender=History)
 def add_user_to_history(sender, instance, **kwargs):
     if not instance.pk and not instance.user_id:
-        instance.user = instance.request.user  # Привязываем текущего пользователя к объекту перед сохранением
+        instance.user = get_current_request().user  # Привязываем текущего пользователя к объекту перед сохранением
