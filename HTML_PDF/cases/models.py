@@ -24,6 +24,15 @@ class Case(models.Model):
 
     def __str__(self):
         return self.number
+class TemplateDocument(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Название шаблона")
+    html_code = models.TextField(verbose_name="HTML код шаблона")
+
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name = "Шаблон отчета"
+        verbose_name_plural = "Шаблоны отчетов"
 
 @receiver(pre_save, sender=Case)
 def add_user_to_case(sender, instance, **kwargs):

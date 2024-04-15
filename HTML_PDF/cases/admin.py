@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Case
+from .models import Case, TemplateDocument
 @admin.register(Case)
 class CaseAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
@@ -10,3 +10,6 @@ class CaseAdmin(admin.ModelAdmin):
         if obj is not None and obj.user != request.user:
             return False  # Запрещаем редактировать объекты, принадлежащие другим пользователям
         return super().has_change_permission(request, obj)
+@admin.register(TemplateDocument)
+class CaseAdmin(admin.ModelAdmin):
+    pass

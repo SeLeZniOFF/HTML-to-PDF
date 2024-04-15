@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bankrotApp',
     'cases',
+    'document_generator',
 ]
 
 MIDDLEWARE = [
