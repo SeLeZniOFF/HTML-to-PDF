@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from bankrotApp.models import Car, Stock, TaxDebt, History, Client, Creditor, Cash, RealEstate, Account
+from bankrotApp.models import Car, Stock, TaxDebt, History, Client, Creditor, Cash, RealEstate, Account, arbitrationManager
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
 from .utils import get_current_request
@@ -17,6 +17,7 @@ class Case(models.Model):
     cash = models.ManyToManyField(Cash, verbose_name="Наличные деньги", blank=True)
     real_estate = models.ManyToManyField(RealEstate, verbose_name="Недвижимость", blank=True)
     accounts = models.ManyToManyField(Account, verbose_name="Счета", blank=True)
+    manager = models.ForeignKey(arbitrationManager, on_delete=models.SET_NULL, null=True, verbose_name="Управляющий")
 
     class Meta:
         verbose_name = "Дело"
@@ -24,15 +25,6 @@ class Case(models.Model):
 
     def __str__(self):
         return self.number
-class TemplateDocument(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Название шаблона")
-    html_code = models.TextField(verbose_name="HTML код шаблона")
-
-    def __str__(self):
-        return self.name
-    class Meta:
-        verbose_name = "Шаблон отчета"
-        verbose_name_plural = "Шаблоны отчетов"
 
 @receiver(pre_save, sender=Case)
 def add_user_to_case(sender, instance, **kwargs):

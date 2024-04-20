@@ -26,7 +26,18 @@ class Client(models.Model):
         if not self.user_id:
             self.user = get_current_request().user
         super().save(*args, **kwargs)
+class arbitrationManager(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", editable=False)
+    first_name = models.CharField(max_length=100, verbose_name="Имя")
+    last_name = models.CharField(max_length=100, verbose_name="Фамилия")
+    middle_name = models.CharField(max_length=100, blank=True, null=True, verbose_name="Отчество")
+    address = models.CharField(max_length=255, verbose_name="Адрес", default="")
 
+    class Meta:
+        verbose_name = "Управляющий"
+        verbose_name_plural = "Управляющие"
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 class Car(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Пользователь", editable=False)
     client = models.ManyToManyField(Client, blank=True, verbose_name="Клиент")
@@ -211,6 +222,7 @@ class History(models.Model):
         return f'{self.client.last_name} {self.client.first_name}'
 
 
+
 # Сигналы для привязки пользователя к объекту перед сохранением
 @receiver(pre_save, sender=Client)
 def add_user_to_client(sender, instance, **kwargs):
@@ -253,6 +265,10 @@ def add_user_to_taxDebt(sender, instance, **kwargs):
         instance.user = get_current_request().user  # Привязываем текущего пользователя к объекту перед сохранением
 
 @receiver(pre_save, sender=History)
+def add_user_to_history(sender, instance, **kwargs):
+    if not instance.pk and not instance.user_id:
+        instance.user = get_current_request().user  # Привязываем текущего пользователя к объекту перед сохранением
+@receiver(pre_save, sender=arbitrationManager)
 def add_user_to_history(sender, instance, **kwargs):
     if not instance.pk and not instance.user_id:
         instance.user = get_current_request().user  # Привязываем текущего пользователя к объекту перед сохранением
