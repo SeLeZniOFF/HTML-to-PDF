@@ -15,3 +15,4 @@ class ThreadLocalMiddleware:
         _thread_locals.request = request
         response = self.get_response(request)
         return response
+

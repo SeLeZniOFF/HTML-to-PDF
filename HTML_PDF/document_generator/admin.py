@@ -9,3 +9,4 @@ class DocumentFormAdmin(admin.ModelAdmin):
 @admin.register(TemplateDocument)
 class TemplateDocumentAdmin(admin.ModelAdmin):
     pass
+
